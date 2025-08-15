@@ -17,7 +17,7 @@
 # tfdoc:file:description OZPR Data AI Dev project factory.
 
 module "projects" {
-  source = "git@github.com:GoogleCloudPlatform/cloud-foundation-fabric.git//modules/project-factory?ref=v32.0.0"
+  source = "git::https://github.com/GoogleCloudPlatform/cloud-foundation-fabric.git//modules/project-factory?ref=v32.0.0"
 
   data_defaults = {
     billing_account = var.billing_account.id
