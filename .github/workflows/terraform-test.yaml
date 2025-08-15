@@ -1,0 +1,65 @@
+name: "Terraform CI/CD Test"
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-test:
+    name: "Terraform Test"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.12.2
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Init (with backend=false for testing)
+        run: terraform init -backend=false
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan (dry-run without backend)
+        run: |
+          echo "This would run terraform plan in a real environment with proper backend configuration"
+          echo "Current configuration validates successfully!"
+
+      - name: Comment on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `
+            ## Terraform CI/CD Test Results 🚀
+            
+            ### ✅ Format Check: Passed
+            ### ✅ Terraform Init: Success  
+            ### ✅ Terraform Validate: Success
+            ### ✅ Configuration: Valid
+            
+            This demonstrates the CI/CD pipeline working correctly!
+            
+            *In a production environment, this would connect to GCP and run a full terraform plan/apply.*
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
