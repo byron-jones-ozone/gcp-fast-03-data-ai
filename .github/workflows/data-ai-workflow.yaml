@@ -29,8 +29,8 @@ env:
   FAST_WIF_PROVIDER: projects/449588813120/locations/global/workloadIdentityPools/ozpr-bootstrap3/providers/ozpr-bootstrap3-github
 
   SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-  TF_PROVIDERS_FILE: providers.tf
-  TF_VAR_FILES: "terraform.tfvars"
+  TF_PROVIDERS_FILE: 3-data-ai-providers.tf
+  TF_VAR_FILES: "0-bootstrap.auto.tfvars.json 0-globals.auto.tfvars.json 1-resman.auto.tfvars.json 2-networking.auto.tfvars.json 2-security.auto.tfvars.json"
   TF_VERSION: 1.12.2
 
 jobs:
@@ -69,26 +69,17 @@ jobs:
         with:
           install_components: alpha
 
-      # copy provider and tfvars files if they exist
+      # copy provider and tfvars files
       - id: tf-config
         name: Copy Terraform output files
         run: |
-          # Copy providers file if it exists in the bucket
-          if gcloud alpha storage ls "gs://${{env.FAST_OUTPUTS_BUCKET}}/providers/${{env.TF_PROVIDERS_FILE}}" 2>/dev/null; then
-            gcloud alpha storage cp -r \
-              "gs://${{env.FAST_OUTPUTS_BUCKET}}/providers/${{env.TF_PROVIDERS_FILE}}" ./
-          fi
-          
-          # Copy tfvars directory if it exists
-          if gcloud alpha storage ls "gs://${{env.FAST_OUTPUTS_BUCKET}}/tfvars/" 2>/dev/null; then
-            gcloud alpha storage cp -r \
-              "gs://${{env.FAST_OUTPUTS_BUCKET}}/tfvars" ./
-            for f in ${{env.TF_VAR_FILES}}; do
-              if [ -f "tfvars/$f" ]; then
-                ln -s "tfvars/$f" ./
-              fi
-            done
-          fi
+          gcloud alpha storage cp -r \
+            "gs://${{env.FAST_OUTPUTS_BUCKET}}/providers/${{env.TF_PROVIDERS_FILE}}" ./
+          gcloud alpha storage cp -r \
+            "gs://${{env.FAST_OUTPUTS_BUCKET}}/tfvars" ./
+          for f in ${{env.TF_VAR_FILES}}; do
+            ln -s "tfvars/$f" ./
+          done
 
       - id: tf-setup
         name: Set up Terraform
@@ -110,11 +101,7 @@ jobs:
         name: Terraform plan
         continue-on-error: true
         run: |
-          if [ -f terraform.tfvars ]; then
-            terraform plan -input=false -out ../plan.out -no-color -var-file terraform.tfvars
-          else
-            terraform plan -input=false -out ../plan.out -no-color
-          fi
+          terraform plan -input=false -out ../plan.out -no-color
 
       - id: tf-apply
         if: github.event.pull_request.merged == true && success()
