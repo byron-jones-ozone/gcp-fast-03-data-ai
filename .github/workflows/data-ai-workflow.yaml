@@ -49,6 +49,7 @@ jobs:
       # set up SSH key authentication to the modules repository
       - id: ssh-config
         name: Configure SSH authentication
+        if: ${{ secrets.CICD_MODULES_KEY != '' }}
         run: |
           ssh-agent -a "$SSH_AUTH_SOCK" > /dev/null
           ssh-add - <<< "${{ secrets.CICD_MODULES_KEY }}"
