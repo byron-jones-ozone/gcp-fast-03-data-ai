@@ -22,6 +22,9 @@ on:
       - closed
       - opened
       - synchronize
+  push:
+    branches:
+      - main
 
 env:
   FAST_OUTPUTS_BUCKET: ozpr-prod-iac-core-outputs-0
@@ -104,7 +107,7 @@ jobs:
           terraform plan -input=false -out ../plan.out -no-color
 
       - id: tf-apply
-        if: github.event.pull_request.merged == true && success()
+        if: (github.event_name == 'push' || github.event.pull_request.merged == true) && success()
         name: Terraform apply
         continue-on-error: true
         run: |
@@ -184,5 +187,5 @@ jobs:
 
       - id: check-apply
         name: Check apply failure
-        if: github.event.pull_request.merged == true && steps.tf-apply.outcome != 'success'
+        if: (github.event_name == 'push' || github.event.pull_request.merged == true) && steps.tf-apply.outcome != 'success'
         run: exit 1
