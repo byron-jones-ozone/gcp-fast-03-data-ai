@@ -34,7 +34,7 @@ This directory contains the Terraform configuration for the OZPR Data AI develop
 
 ## Project Configuration
 
-The project configuration is defined in `data/hierarchy/data-engineering/dev/ozpr-data-ai-dev.yaml` and includes:
+The project configuration is defined in `data/hierarchy/data-engineering/dev/data-ai-dev.yaml` and includes:
 
 - BigQuery APIs enabled
 - Data engineering team IAM bindings

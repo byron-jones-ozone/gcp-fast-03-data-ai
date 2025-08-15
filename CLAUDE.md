@@ -76,7 +76,7 @@ cp terraform.tfvars.sample terraform.tfvars
 - **Providers**: `providers.tf` - GCS backend and Google provider configuration
 
 ### Project Configuration
-Project settings defined in `data/hierarchy/data-engineering/dev/ozpr-data-ai-dev.yaml`:
+Project settings defined in `data/hierarchy/data-engineering/dev/data-ai-dev.yaml`:
 - Enables BigQuery, Container, Storage, and Composer APIs
 - Creates service accounts for dbt-cloud-data-ai and composer
 - Configures shared VPC with host project `ozpr-dev-net-spoke-0`
@@ -111,5 +111,5 @@ Required secrets:
 ├── terraform.tfvars.sample # Sample variables file
 └── data/hierarchy/         # Project configuration YAML files
     └── data-engineering/dev/
-        └── ozpr-data-ai-dev.yaml  # Project configuration
+        └── data-ai-dev.yaml  # Project configuration
 ```
