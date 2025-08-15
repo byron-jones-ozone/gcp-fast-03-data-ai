@@ -90,6 +90,18 @@ Requires completion of FAST stages: 0-bootstrap, 1-resman, 2-networking, 2-secur
 - State prefix: `ozpr-data-ai-dev/state`
 - Service account impersonation for authentication
 
+### CI/CD Pipeline
+The GitHub Actions workflow provides:
+- **Automatic triggering**: On pull requests to main branch
+- **Terraform validation**: Format check, init, validate, and plan
+- **GCP authentication**: Via Workload Identity Federation
+- **FAST integration**: Automatic download of stage outputs and providers
+- **Apply on merge**: Automatically applies when PR is merged
+- **PR comments**: Detailed plan output and step results
+
+Required secrets:
+- `CICD_MODULES_KEY`: SSH key for accessing Cloud Foundation Fabric modules
+
 ## File Structure
 ```
 ├── main.tf                 # Project factory module configuration
