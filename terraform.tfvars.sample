@@ -1,0 +1,9 @@
+# Sample terraform.tfvars file
+# Copy this to terraform.tfvars and update with your actual values
+
+billing_account = {
+  id           = "XXXXXX-XXXXXX-XXXXXX"
+  is_org_level = true
+}
+
+prefix = "ozpr"

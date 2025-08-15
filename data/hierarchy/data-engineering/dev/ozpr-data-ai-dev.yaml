@@ -1,0 +1,24 @@
+labels:
+  team: data-engineering
+  environment: dev
+parent: folders/1049092651141
+services:
+  - bigquery.googleapis.com
+  - container.googleapis.com
+  - storage.googleapis.com
+  - composer.googleapis.com
+service_accounts:
+  dbt-cloud-data-ai:
+    display_name: "dbt-cloud-data-ai"
+  composer:
+    display_name: "composer"
+shared_vpc_service_config:
+  host_project: ozpr-dev-net-spoke-0
+  network_users:
+    - group:gcp-data-engineering-user@ozoneproject.com
+  service_identity_iam: {}
+  service_identity_subnet_iam: {}
+  service_iam_grants: []
+  network_subnet_users:
+    europe-west2/dev-default-ew2:
+    - group:gcp-data-engineering-user@ozoneproject.com
