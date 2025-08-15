@@ -46,5 +46,6 @@ The project configuration is defined in `data/hierarchy/data-engineering/dev/ozp
 This project includes a GitHub Actions workflow that:
 - Triggers on pull requests to main branch
 - Runs Terraform init, validate, and plan
-- Applies changes when PRs are merged
+- **Applies changes automatically when PRs are merged**
 - Posts detailed comments on PRs with plan output
+- Uses FAST framework integration for seamless deployment
